@@ -1,7 +1,8 @@
 window.onload = function () {
 
     const btnStart = document.querySelector('.btn-start');
-    const reelStage = document.querySelector('.reel__stage');
+    const reel = document.querySelector('.reel');
+    let reelStage = reel.querySelector('.reel__stage');
     const reelWrapper = reelStage.querySelector('.reel__wrapper');
     let symbols = ['BAR', '2xBAR', '3xBAR', '7', 'CHERRY'];
     const landPositions = {
@@ -50,8 +51,14 @@ window.onload = function () {
         let goalSymbol = document.querySelector('.goal-symbol').value;
         let transform = 0;
 
+        if (reel.childElementCount > 1) reel.children[1].remove();
+        reelStage = reel.querySelector('.reel__stage');
+
+        let randomSymbols = getRandomSymbols(symbols);
         setCertainPosition(randomSymbols, goalRow, goalSymbol);
 
+        let newReelStage = document.createElement('div');
+        newReelStage.className = 'reel__stage';
         for (let i = 1; i <= 5; i++) {
             transform = 100 * i;
             let newReelWrapper = document.createElement('div');
@@ -64,10 +71,16 @@ window.onload = function () {
                 reelImg.className = 'reel__img';
                 newReelWrapper.append(reelImg);
             });
-            reelStage.prepend(newReelWrapper);
+            newReelStage.prepend(newReelWrapper);
             newReelWrapper.style.transform = 'translateY(' + -transform + '%)';
         }
-        reelStage.style.transform = 'translateY(' + transform + '%)';
+        reel.prepend(newReelStage);
+
+        setTimeout(() => {
+            newReelStage.style.transform = 'translateY(' + transform + '%)';
+            reelStage.style.transform = 'translateY(' + transform * 2 + '%)';
+        });
+
     });
 
 };
