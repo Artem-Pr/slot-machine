@@ -45,16 +45,28 @@ b, strong
 
 .reel
 	box-sizing: border-box
-	height: 304px
+	height: 300px
 	border: 2px solid black
 	position: relative
-	//overflow: hidden
+	overflow: hidden
 
+.reel__stage,
 .reel__wrapper
 	position: absolute
-	left: 10px
-	right: 10px
-	top: -100px
+	left: 0
+	right: 0
+
+.reel__stage
+	top: -102px
+	bottom: -102px
+	transition: transform 2s ease
+
+.reel__item
+	height: 100px
+
+.reel__img
+	height: 100px
+	object-fit: contain
 
 
 
