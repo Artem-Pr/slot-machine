@@ -4149,14 +4149,14 @@ strong {
   overflow: hidden;
 }
 
-.reel__stage,
+.reel__container,
 .reel__wrapper {
   position: absolute;
   left: 0;
   right: 0;
 }
 
-.reel__stage {
+.reel__container {
   top: -102px;
   bottom: -102px;
   -webkit-transition: -webkit-transform 2s ease;

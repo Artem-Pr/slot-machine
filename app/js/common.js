@@ -2,14 +2,16 @@ window.onload = function () {
 
     const btnStart = document.querySelector('.btn-start');
     const reel = document.querySelector('.reel');
-    let reelStage = reel.querySelector('.reel__stage');
-    const reelWrapper = reelStage.querySelector('.reel__wrapper');
-    let symbols = ['BAR', '2xBAR', '3xBAR', '7', 'CHERRY'];
+    const reelWrapper = reel.querySelector('.reel__wrapper');
+    const reelSpeed = 5;
     const landPositions = {
         top: 1,
         center: 2,
         bottom: 3
     };
+    let firstReelContainer = reel.querySelector('.reel__container');
+    let symbols = ['BAR', '2xBAR', '3xBAR', '7', 'CHERRY'];
+    let translation = 0;
 
 
     function getRandomSymbols(symbols) {
@@ -26,16 +28,6 @@ window.onload = function () {
         return symbols;
     }
 
-    let randomSymbols = getRandomSymbols(symbols);
-
-    randomSymbols.forEach(function (item) {
-        let reelImg = document.createElement('img');
-        reelImg.src = 'img/reel/' + item + '.png';
-        reelImg.alt = item;
-        reelImg.className = 'reel__img';
-        reelWrapper.append(reelImg);
-    });
-
     function setCertainPosition(symbolsArr, goalRow, goalSymbol) {
         if (goalRow && goalSymbol) {
             let rowNumber = landPositions[goalRow];
@@ -45,42 +37,64 @@ window.onload = function () {
         }
     }
 
+    function createReelContainer(randomSymbolsArr) {
+        let newReelContainer = document.createElement('div');
+        newReelContainer.className = 'reel__container';
+        for (let i = 1; i <= reelSpeed; i++) {
+            translation = 100 * i;
+            let newReelWrapper = createReelWrapper(randomSymbolsArr);
+            newReelContainer.prepend(newReelWrapper);
+        }
+        return newReelContainer;
+    }
 
-    btnStart.addEventListener('click', () => {
+    function createReelWrapper(randomSymbolsArr) {
+        let newReelWrapper = document.createElement('div');
+        newReelWrapper.className = 'reel__wrapper';
+        createImage(randomSymbolsArr, newReelWrapper);
+        newReelWrapper.style.transform = 'translateY(' + -translation + '%)';
+        return newReelWrapper;
+    }
+
+    function createImage (symbolsArr, wrapper) {
+        symbolsArr.forEach(function (item) {
+            let reelImg = document.createElement('img');
+            reelImg.src = 'img/reel/' + item + '.png';
+            reelImg.alt = item;
+            reelImg.className = 'reel__img';
+            wrapper.append(reelImg);
+        });
+    }
+
+    function removeObsoleteItems() {
+        if (reel.childElementCount > 1) reel.children[1].remove();
+    }
+
+
+    let randomSymbols = getRandomSymbols(symbols);
+    createImage(randomSymbols, reelWrapper);
+
+    btnStart.addEventListener('click', (e) => {
+        e.target.disabled = true;
+        let reelContainer = reel.querySelector('.reel__container');
         let goalRow = document.querySelector('.goal-row').value;
         let goalSymbol = document.querySelector('.goal-symbol').value;
-        let transform = 0;
-
-        if (reel.childElementCount > 1) reel.children[1].remove();
-        reelStage = reel.querySelector('.reel__stage');
-
         let randomSymbols = getRandomSymbols(symbols);
+
+        removeObsoleteItems();
         setCertainPosition(randomSymbols, goalRow, goalSymbol);
-
-        let newReelStage = document.createElement('div');
-        newReelStage.className = 'reel__stage';
-        for (let i = 1; i <= 5; i++) {
-            transform = 100 * i;
-            let newReelWrapper = document.createElement('div');
-            newReelWrapper.className = 'reel__wrapper';
-
-            randomSymbols.forEach(function (item) {
-                let reelImg = document.createElement('img');
-                reelImg.src = 'img/reel/' + item + '.png';
-                reelImg.alt = item;
-                reelImg.className = 'reel__img';
-                newReelWrapper.append(reelImg);
-            });
-            newReelStage.prepend(newReelWrapper);
-            newReelWrapper.style.transform = 'translateY(' + -transform + '%)';
-        }
-        reel.prepend(newReelStage);
+        let newReelContainer = createReelContainer(randomSymbols);
+        reel.prepend(newReelContainer);
 
         setTimeout(() => {
-            newReelStage.style.transform = 'translateY(' + transform + '%)';
-            reelStage.style.transform = 'translateY(' + transform * 2 + '%)';
+            newReelContainer.style.transform = 'translateY(' + translation + '%)';
+            if (firstReelContainer) {
+                firstReelContainer.style.transform = 'translateY(' + translation + '%)';
+                firstReelContainer = null;
+            } else reelContainer.style.transform = 'translateY(' + translation * 2 + '%)';
         });
-
+        setTimeout(() => {
+            e.target.disabled = false;
+        }, 2000);
     });
-
 };
