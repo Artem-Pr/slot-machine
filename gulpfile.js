@@ -48,7 +48,7 @@ gulp.task('scripts', function() {
 		presets: ['@babel/env']
 	}))
 	.pipe(concat('scripts.min.js'))
-	// .pipe(uglify()) // Mifify js (opt.)
+	// .pipe(uglify()) // Minify js (opt.)
 	.pipe(gulp.dest('app/js'))
 	.pipe(browserSync.reload({ stream: true }))
 });
