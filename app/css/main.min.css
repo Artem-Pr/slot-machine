@@ -4140,10 +4140,44 @@ strong {
   margin-top: 200px;
 }
 
+.slot-display {
+  position: relative;
+}
+
+.win-line {
+  position: absolute;
+  height: 20%;
+  width: 100%;
+  left: 0;
+  opacity: 0.5;
+  border-radius: 35px;
+}
+
+.win-line.active-red {
+  background-color: red;
+}
+
+.win-line.active-yellow {
+  background-color: yellow;
+}
+
+.win-line1 {
+  top: 6%;
+}
+
+.win-line2 {
+  top: 40%;
+}
+
+.win-line3 {
+  top: 74%;
+}
+
 .reel {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   height: 300px;
+  width: 150px;
   border: 2px solid black;
   position: relative;
   overflow: hidden;
@@ -4159,11 +4193,30 @@ strong {
 .reel__container {
   top: -102px;
   bottom: -102px;
-  -webkit-transition: -webkit-transform 2s ease;
-  transition: -webkit-transform 2s ease;
-  -o-transition: transform 2s ease;
-  transition: transform 2s ease;
-  transition: transform 2s ease, -webkit-transform 2s ease;
+}
+
+.reel__1 > .reel__container {
+  -webkit-transition: -webkit-transform 2s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+  transition: -webkit-transform 2s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+  -o-transition: transform 2s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+  transition: transform 2s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+  transition: transform 2s cubic-bezier(0.3, 0.13, 0.79, 1.11), -webkit-transform 2s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+}
+
+.reel__2 > .reel__container {
+  -webkit-transition: -webkit-transform 2.5s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+  transition: -webkit-transform 2.5s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+  -o-transition: transform 2.5s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+  transition: transform 2.5s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+  transition: transform 2.5s cubic-bezier(0.3, 0.13, 0.79, 1.11), -webkit-transform 2.5s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+}
+
+.reel__3 > .reel__container {
+  -webkit-transition: -webkit-transform 3s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+  transition: -webkit-transform 3s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+  -o-transition: transform 3s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+  transition: transform 3s cubic-bezier(0.3, 0.13, 0.79, 1.11);
+  transition: transform 3s cubic-bezier(0.3, 0.13, 0.79, 1.11), -webkit-transform 3s cubic-bezier(0.3, 0.13, 0.79, 1.11);
 }
 
 .reel__item {
