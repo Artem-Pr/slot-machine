@@ -1,64 +1,64 @@
 window.onload = function () {
     let reelItem = (function () {
-        return function (reelSelector, speed) {
+        return function (reelSelector, reelSpeed, spinTime, spinDelay) {
 
             const btnStart = document.querySelector('.btn-start');
             const reel = document.querySelector(reelSelector);
             const reelWrapper = reel.querySelector('.reel__wrapper');
-            const reelSpeed = speed;
             const landPositions = {
-                top: 1,
-                center: 2,
-                bottom: 3
+                top: 20,
+                center: 30,
+                bottom: 40
             };
-            let firstReelContainer = reel.querySelector('.reel__container');
-            let symbols = ['BAR', '2xBAR', '3xBAR', '7', 'CHERRY'];
-            let translation = 0;
+            let ReelContainer = reel.querySelector('.reel__container');
+            let symbols = ['3xBAR', 'BAR', '2xBAR', '7', 'CHERRY'];
+            let translation = getRandomPosition();
 
 
-            function getRandomSymbols(symbols) {
-                let j = 0,
-                    temp,
-                    mountOfElements = symbols.length;
+            // function getRandomSymbols(symbols) {
+            //     let j = 0,
+            //         temp,
+            //         mountOfElements = symbols.length;
+            //
+            //     while (mountOfElements--) {
+            //         j = Math.floor(Math.random() * (mountOfElements + 1));
+            //         temp = symbols[mountOfElements];
+            //         symbols[mountOfElements] = symbols[j];
+            //         symbols[j] = temp;
+            //     }
+            //     return symbols;
+            // }
 
-                while (mountOfElements--) {
-                    j = Math.floor(Math.random() * (mountOfElements + 1));
-                    temp = symbols[mountOfElements];
-                    symbols[mountOfElements] = symbols[j];
-                    symbols[j] = temp;
-                }
-                return symbols;
-            }
-
-            function setCertainPosition(symbolsArr, goalRow, goalSymbol) {
-                if (goalRow && goalSymbol) {
-                    let rowNumber = landPositions[goalRow];
-                    while (symbolsArr[rowNumber] !== goalSymbol) {
-                        symbolsArr.unshift(symbolsArr.pop());
-                    }
-                }
-            }
+            // function setCertainPosition(symbolsArr, goalRow, goalSymbol) {
+            //     if (goalRow && goalSymbol) {
+            //         let winTranslation = landPositions[goalRow];
+            //         while (symbolsArr[winTranslation] !== goalSymbol) {
+            //             symbolsArr.unshift(symbolsArr.pop());
+            //         }
+            //     }
+            // }
 
             function createReelContainer(randomSymbolsArr) {
                 let newReelContainer = document.createElement('div');
                 newReelContainer.className = 'reel__container';
                 for (let i = 1; i <= reelSpeed; i++) {
-                    translation = 100 * i;
                     let newReelWrapper = createReelWrapper(randomSymbolsArr);
                     newReelContainer.prepend(newReelWrapper);
                 }
+                let containerTranslation = translation - 100 * reelSpeed;
+                setTranslation(newReelContainer, containerTranslation);
+                setTransform(newReelContainer, spinTime, spinDelay);
                 return newReelContainer;
             }
 
-            function createReelWrapper(randomSymbolsArr) {
+            function createReelWrapper(symbolsArr) {
                 let newReelWrapper = document.createElement('div');
                 newReelWrapper.className = 'reel__wrapper';
-                createImage(randomSymbolsArr, newReelWrapper);
-                newReelWrapper.style.transform = 'translateY(' + -translation + '%)';
+                createImages(symbolsArr, newReelWrapper);
                 return newReelWrapper;
             }
 
-            function createImage(symbolsArr, wrapper) {
+            function createImages(symbolsArr, wrapper) {
                 symbolsArr.forEach(item => {
                     let reelImg = document.createElement('img');
                     reelImg.src = 'img/reel/' + item + '.png';
@@ -72,39 +72,75 @@ window.onload = function () {
                 if (reel.childElementCount > 1) reel.children[1].remove();
             }
 
-            function addWinResult(symbols) {
-                if (reelSelector === '.reel__1') results = [symbols[1], symbols[2], symbols[3]];
-                else results.forEach((item, i, array) => {
-                    if (item === symbols[i+1]) return;
-                    if (winKits[item] === winKits[symbols[i+1]]) array[i] = winKits[item];
-                })
+
+
+
+
+
+
+
+            function getResults(translation) {
+                let resultsArr = [];
+                let j = symbols.length - 1;
+                let i = 0;
+                let firstSymbolTrans = translation - j * 20;
+                while (firstSymbolTrans <= 40 ) {
+                    if (firstSymbolTrans === landPositions.top) resultsArr[0] = symbols[i];
+                    if (firstSymbolTrans === landPositions.center) resultsArr[1] = symbols[i];
+                    if (firstSymbolTrans === landPositions.bottom) resultsArr[2] = symbols[i];
+                    if (++i > j) i = 0;
+                    firstSymbolTrans += 20;
+                }
+                return resultsArr;
             }
 
+            function getFinishPosition(row, symbol) {
+                if (!row && !symbol) return getRandomPosition();
+                let trans = landPositions[row];
+                let i = symbols.length;
+                while (symbol !== symbols[--i]) {
+                    trans += 20;
+                    if (trans > 100) trans -=100;
+                }
+                return trans;
+            }
 
-            let randomSymbols = getRandomSymbols(symbols);
-            createImage(randomSymbols, reelWrapper);
+            function getRandomPosition() {
+                return Math.ceil(Math.random() * 10) * 10;
+            }
+
+            function setTranslation(element, translation) {
+                element.style.transform = 'translateY(' + translation + '%)';
+            }
+
+            function setTransform(element, spinTime, spinDelay) {
+                element.style.transition = 'transform ' + (spinTime + spinDelay) + 's cubic-bezier(.3,.13,.79,1.11)';
+            }
+
+            createImages(symbols, reelWrapper);
+            ReelContainer.append(createReelWrapper(symbols));
+            setTranslation(ReelContainer, translation);
+
+
 
             btnStart.addEventListener('click', () => {
                 let reelContainer = reel.querySelector('.reel__container');
                 let goalRow = document.querySelector('.goal-row').value;
                 let goalSymbol = document.querySelector('.goal-symbol').value;
-                let randomSymbols = getRandomSymbols(symbols);
 
                 removeWinLine();
                 removeObsoleteItems();
-                setCertainPosition(randomSymbols, goalRow, goalSymbol);
-                let newReelContainer = createReelContainer(randomSymbols);
+                let newReelContainer = createReelContainer(symbols);
                 reel.prepend(newReelContainer);
+                setTransform(ReelContainer, spinTime, spinDelay);
 
-                results.push(randomSymbols.slice(1,4));
+                translation = getFinishPosition(goalRow, goalSymbol);
+                let prevReelContainerTrans = 100 * reelSpeed + translation;
+                results.push(getResults(translation));
 
-                // addWinResult(randomSymbols);
                 setTimeout(() => {
                     newReelContainer.style.transform = 'translateY(' + translation + '%)';
-                    if (firstReelContainer) {
-                        firstReelContainer.style.transform = 'translateY(' + translation + '%)';
-                        firstReelContainer = null;
-                    } else reelContainer.style.transform = 'translateY(' + translation * 2 + '%)';
+                    reelContainer.style.transform = 'translateY(' + prevReelContainerTrans + '%)';
                 });
             });
 
@@ -142,9 +178,12 @@ window.onload = function () {
         'kit1_2': 5,
     };
     let results = [];
-    reelItem('.reel__1', 8);
-    reelItem('.reel__2', 10);
-    reelItem('.reel__3', 12);
+    let spinTime = 2; //s
+    let spinDelay = 0.5; //s
+
+    reelItem('.reel__1', 4, spinTime, 0);
+    reelItem('.reel__2', 5, spinTime, spinDelay);
+    reelItem('.reel__3', 6, spinTime, spinDelay * 2);
 
     function highlightWinLine(score, lineNumb) {
         let line = document.querySelector('.win-line' + (lineNumb+1));
@@ -184,9 +223,10 @@ window.onload = function () {
 
     document.querySelector('.btn-start').addEventListener('click', (e) => {
         e.target.disabled = true;
+        console.log(results);
         setTimeout(() => {
             checkResults(results);
             e.target.disabled = false;
-        }, 3000);
+        }, (spinTime + 2 * spinDelay) * 1000);
     });
 };
