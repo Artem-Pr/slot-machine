@@ -42,13 +42,14 @@ gulp.task('styles', function() {
 // JS
 gulp.task('scripts', function() {
 	return gulp.src([
-		'app/js/common.js' // Always at the end
+		'app/js/common.js',
+		'app/js/reel.js'
 		])
 	.pipe(babel({
 		presets: ['@babel/env']
 	}))
 	.pipe(concat('scripts.min.js'))
-	// .pipe(uglify()) // Minify js (opt.)
+	// .pipe(uglify())
 	.pipe(gulp.dest('app/js'))
 	.pipe(browserSync.reload({ stream: true }))
 });
@@ -86,7 +87,7 @@ gulp.task('tinypng', function () {
 
 gulp.task('watch', function() {
 	gulp.watch('app/'+syntax+'/**/*.'+syntax+'', gulp.parallel('styles'));
-	gulp.watch(['libs/**/*.js', 'app/js/common.js'], gulp.parallel('scripts'));
+	gulp.watch(['libs/**/*.js', 'app/js/common.js', 'app/js/reel.js'], gulp.parallel('scripts'));
 	gulp.watch('app/*.html', gulp.parallel('code'));
 });
 
