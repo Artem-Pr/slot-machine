@@ -41,7 +41,7 @@ b, strong
 
 
 .container
-	margin-top: 3000px
+	margin-top: 50px
 
 .slot-display
 	position: relative
@@ -69,6 +69,48 @@ b, strong
 .win-line3
 	top: 65%
 
+.win-modal
+	display: none
+	background-color: #dc3545
+	color: #51e4fd
+	padding: 25px 80px
+	text-transform: uppercase
+	
+	position: absolute
+	top: 50%
+	right: 50%
+	transform: translate(50%, -50%)
+	z-index: 1
+
+	animation-name: blinker, scale
+	animation-duration: 0.5s, 2.5s
+	animation-delay: 0.7s, 0s
+	animation-iteration-count: 8, 2
+	animation-timing-function: ease-in
+	animation-direction: alternate
+
+	&__score
+		font-size: 50px
+		font-weight: 600
+
+@keyframes blinker
+	from
+		opacity: 1
+	to
+		opacity: 0
+	20%
+		opacity: 1
+
+@keyframes scale
+	from
+		transform: translate(50%, -50%) scale(0.1, 0.1)
+	to
+		transform: translate(50%, -50%) scale(1, 1)
+	20%
+		transform: translate(50%, -50%) scale(1, 1)
+
+
+
 .reel
 	box-sizing: border-box
 	height: 300px
@@ -94,15 +136,8 @@ b, strong
 	width: 100%
 	object-fit: contain
 
-//.blink_me {
-//		animation: blinker 1s linear infinite;
-//}
-//
-//@keyframes blinker {
-//50% {
-//opacity: 0;
-//}
-//}
+.balance
+	text-align: right
 
 
 

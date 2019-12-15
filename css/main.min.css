@@ -4137,7 +4137,7 @@ strong {
 }
 
 .container {
-  margin-top: 3000px;
+  margin-top: 50px;
 }
 
 .slot-display {
@@ -4173,6 +4173,92 @@ strong {
   top: 65%;
 }
 
+.win-modal {
+  display: none;
+  background-color: #dc3545;
+  color: #51e4fd;
+  padding: 25px 80px;
+  text-transform: uppercase;
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  -webkit-transform: translate(50%, -50%);
+      -ms-transform: translate(50%, -50%);
+          transform: translate(50%, -50%);
+  z-index: 1;
+  -webkit-animation-name: blinker, scale;
+          animation-name: blinker, scale;
+  -webkit-animation-duration: 0.5s, 2.5s;
+          animation-duration: 0.5s, 2.5s;
+  -webkit-animation-delay: 0.7s, 0s;
+          animation-delay: 0.7s, 0s;
+  -webkit-animation-iteration-count: 8, 2;
+          animation-iteration-count: 8, 2;
+  -webkit-animation-timing-function: ease-in;
+          animation-timing-function: ease-in;
+  -webkit-animation-direction: alternate;
+          animation-direction: alternate;
+}
+
+.win-modal__score {
+  font-size: 50px;
+  font-weight: 600;
+}
+
+@-webkit-keyframes blinker {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+}
+
+@keyframes blinker {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes scale {
+  from {
+    -webkit-transform: translate(50%, -50%) scale(0.1, 0.1);
+            transform: translate(50%, -50%) scale(0.1, 0.1);
+  }
+  to {
+    -webkit-transform: translate(50%, -50%) scale(1, 1);
+            transform: translate(50%, -50%) scale(1, 1);
+  }
+  20% {
+    -webkit-transform: translate(50%, -50%) scale(1, 1);
+            transform: translate(50%, -50%) scale(1, 1);
+  }
+}
+
+@keyframes scale {
+  from {
+    -webkit-transform: translate(50%, -50%) scale(0.1, 0.1);
+            transform: translate(50%, -50%) scale(0.1, 0.1);
+  }
+  to {
+    -webkit-transform: translate(50%, -50%) scale(1, 1);
+            transform: translate(50%, -50%) scale(1, 1);
+  }
+  20% {
+    -webkit-transform: translate(50%, -50%) scale(1, 1);
+            transform: translate(50%, -50%) scale(1, 1);
+  }
+}
+
 .reel {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -4203,6 +4289,10 @@ strong {
   width: 100%;
   -o-object-fit: contain;
      object-fit: contain;
+}
+
+.balance {
+  text-align: right;
 }
 
 /*==========  Desktop First  ==========*/

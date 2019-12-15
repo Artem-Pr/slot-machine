@@ -1,152 +1,7 @@
 window.onload = function () {
-    let reelItem = (function () {
-        return function (reelSelector, reelSpeed, spinTime, spinDelay) {
-
-            const btnStart = document.querySelector('.btn-start');
-            const reel = document.querySelector(reelSelector);
-            const reelWrapper = reel.querySelector('.reel__wrapper');
-            const landPositions = {
-                top: 20,
-                center: 30,
-                bottom: 40
-            };
-            let ReelContainer = reel.querySelector('.reel__container');
-            let symbols = ['3xBAR', 'BAR', '2xBAR', '7', 'CHERRY'];
-            let translation = getRandomPosition();
-
-
-            // function getRandomSymbols(symbols) {
-            //     let j = 0,
-            //         temp,
-            //         mountOfElements = symbols.length;
-            //
-            //     while (mountOfElements--) {
-            //         j = Math.floor(Math.random() * (mountOfElements + 1));
-            //         temp = symbols[mountOfElements];
-            //         symbols[mountOfElements] = symbols[j];
-            //         symbols[j] = temp;
-            //     }
-            //     return symbols;
-            // }
-
-            // function setCertainPosition(symbolsArr, goalRow, goalSymbol) {
-            //     if (goalRow && goalSymbol) {
-            //         let winTranslation = landPositions[goalRow];
-            //         while (symbolsArr[winTranslation] !== goalSymbol) {
-            //             symbolsArr.unshift(symbolsArr.pop());
-            //         }
-            //     }
-            // }
-
-            function createReelContainer(randomSymbolsArr) {
-                let newReelContainer = document.createElement('div');
-                newReelContainer.className = 'reel__container';
-                for (let i = 1; i <= reelSpeed; i++) {
-                    let newReelWrapper = createReelWrapper(randomSymbolsArr);
-                    newReelContainer.prepend(newReelWrapper);
-                }
-                let containerTranslation = translation - 100 * reelSpeed;
-                setTranslation(newReelContainer, containerTranslation);
-                setTransform(newReelContainer, spinTime, spinDelay);
-                return newReelContainer;
-            }
-
-            function createReelWrapper(symbolsArr) {
-                let newReelWrapper = document.createElement('div');
-                newReelWrapper.className = 'reel__wrapper';
-                createImages(symbolsArr, newReelWrapper);
-                return newReelWrapper;
-            }
-
-            function createImages(symbolsArr, wrapper) {
-                symbolsArr.forEach(item => {
-                    let reelImg = document.createElement('img');
-                    reelImg.src = 'img/reel/' + item + '.png';
-                    reelImg.alt = item;
-                    reelImg.className = 'reel__img';
-                    wrapper.append(reelImg);
-                });
-            }
-
-            function removeObsoleteItems() {
-                if (reel.childElementCount > 1) reel.children[1].remove();
-            }
-
-
-
-
-
-
-
-
-            function getResults(translation) {
-                let resultsArr = [];
-                let j = symbols.length - 1;
-                let i = 0;
-                let firstSymbolTrans = translation - j * 20;
-                while (firstSymbolTrans <= 40 ) {
-                    if (firstSymbolTrans === landPositions.top) resultsArr[0] = symbols[i];
-                    if (firstSymbolTrans === landPositions.center) resultsArr[1] = symbols[i];
-                    if (firstSymbolTrans === landPositions.bottom) resultsArr[2] = symbols[i];
-                    if (++i > j) i = 0;
-                    firstSymbolTrans += 20;
-                }
-                return resultsArr;
-            }
-
-            function getFinishPosition(row, symbol) {
-                if (!row && !symbol) return getRandomPosition();
-                let trans = landPositions[row];
-                let i = symbols.length;
-                while (symbol !== symbols[--i]) {
-                    trans += 20;
-                    if (trans > 100) trans -=100;
-                }
-                return trans;
-            }
-
-            function getRandomPosition() {
-                return Math.ceil(Math.random() * 10) * 10;
-            }
-
-            function setTranslation(element, translation) {
-                element.style.transform = 'translateY(' + translation + '%)';
-            }
-
-            function setTransform(element, spinTime, spinDelay) {
-                element.style.transition = 'transform ' + (spinTime + spinDelay) + 's cubic-bezier(.3,.13,.79,1.11)';
-            }
-
-            createImages(symbols, reelWrapper);
-            ReelContainer.append(createReelWrapper(symbols));
-            setTranslation(ReelContainer, translation);
-
-
-
-            btnStart.addEventListener('click', () => {
-                let reelContainer = reel.querySelector('.reel__container');
-                let goalRow = document.querySelector('.goal-row').value;
-                let goalSymbol = document.querySelector('.goal-symbol').value;
-
-                removeWinLine();
-                removeObsoleteItems();
-                let newReelContainer = createReelContainer(symbols);
-                reel.prepend(newReelContainer);
-                setTransform(ReelContainer, spinTime, spinDelay);
-
-                translation = getFinishPosition(goalRow, goalSymbol);
-                let prevReelContainerTrans = 100 * reelSpeed + translation;
-                results.push(getResults(translation));
-
-                setTimeout(() => {
-                    newReelContainer.style.transform = 'translateY(' + translation + '%)';
-                    reelContainer.style.transform = 'translateY(' + prevReelContainerTrans + '%)';
-                });
-            });
-
-        }
-    }());
-
+    let balanceElem = document.querySelector('.balance');
+    let goalRowElem = document.querySelector('.goal-row');
+    let goalSymbolElem = document.querySelector('.goal-symbol');
     let winKits = {
         'BAR': 'kit1',
         '2xBAR': 'kit1',
@@ -180,10 +35,24 @@ window.onload = function () {
     let results = [];
     let spinTime = 2; //s
     let spinDelay = 0.5; //s
-
-    reelItem('.reel__1', 4, spinTime, 0);
-    reelItem('.reel__2', 5, spinTime, spinDelay);
-    reelItem('.reel__3', 6, spinTime, spinDelay * 2);
+    let startSpin1 = reelItem({
+        reelSelector: '.reel__1',
+        reelSpeed: 4,
+        spinTime,
+        spinDelay: 0,
+    });
+    let startSpin2 = reelItem({
+        reelSelector: '.reel__2',
+        reelSpeed: 5,
+        spinTime,
+        spinDelay,
+    });
+    let startSpin3 = reelItem({
+        reelSelector: '.reel__3',
+        reelSpeed: 6,
+        spinTime,
+        spinDelay: spinDelay * 2,
+    });
 
     function highlightWinLine(score, lineNumb) {
         let line = document.querySelector('.win-line' + (lineNumb+1));
@@ -197,35 +66,63 @@ window.onload = function () {
             lines[i].classList.remove('active-red', 'active-yellow');
         }
     }
-    
-    function calcWinScore(symbol, i) {
-        console.log(winPoints[symbol + '_' + i]);
-        if (symbol === null) return;
-        highlightWinLine(winPoints[symbol + '_' + i], i);
+
+    function allowGame(balanceElem) {
+        if (balanceElem.value > 0) return true;
+        alert("You do not have enough points to play! Please recharge points");
+        return false;
     }
 
-    function checkResults(resultsArr) {
-        resultsArr[0].forEach((item, i) => {
+
+
+    function getOneLinePoints(symbol, i) {
+        if (!symbol) return 0;
+        return winPoints[symbol + '_' + i]
+    }
+
+    function getAllPoints(resultsArr) {
+        let pointsArr = resultsArr[0];
+        return pointsArr.reduce((accum, item, i) => {
+            let score = 0;
             if (item === resultsArr[1][i] && item === resultsArr[2][i]) {
-                calcWinScore(item, i);
-                return;
-            }
-            if (winKits[item] === winKits[resultsArr[1][i]] &&
+                score = getOneLinePoints(item, i);
+            } else if (winKits[item] === winKits[resultsArr[1][i]] &&
                 winKits[item] === winKits[resultsArr[2][i]]) {
-                calcWinScore(winKits[item], i);
-                return;
+                score = getOneLinePoints(winKits[item], i);
             }
-            calcWinScore(null);
-        });
-        results = [];
-        console.log('------');
+            if (score !== 0) {
+                highlightWinLine(score, i);
+            }
+            return score + accum;
+        }, 0);
+    }
+
+    function showWinPoints(points) {
+        let modal = document.querySelector('.win-modal');
+        let modalText = modal.querySelector('.win-modal__score');
+        modalText.textContent = points;
+        modal.style.display = 'block';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 5000)
     }
 
     document.querySelector('.btn-start').addEventListener('click', (e) => {
+        let goalRow = goalRowElem.value;
+        let goalSymbol = goalSymbolElem.value;
+        if (!allowGame(balanceElem)) return;
+        --balanceElem.value;
         e.target.disabled = true;
-        console.log(results);
+        results.push(startSpin1(goalRow, goalSymbol));
+        results.push(startSpin2(goalRow, goalSymbol));
+        results.push(startSpin3(goalRow, goalSymbol));
+        removeWinLine();
+
         setTimeout(() => {
-            checkResults(results);
+            let points = getAllPoints(results);
+            if (points) showWinPoints(points);
+            balanceElem.value = +balanceElem.value + points;
+            results = [];
             e.target.disabled = false;
         }, (spinTime + 2 * spinDelay) * 1000);
     });
