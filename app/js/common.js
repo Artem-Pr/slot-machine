@@ -71,10 +71,18 @@ window.onload = function () {
         return false;
     }
 
-
     function getOneLinePoints(symbol, i) {
         if (!symbol) return 0;
         return winPoints[symbol + '_' + i]
+    }
+    
+    function blinkPoints(score) {
+        if (!score) return;
+        let blinkElem = document.querySelector('.p' + score);
+        blinkElem.classList.add('blink-points');
+        setTimeout(() => {
+            blinkElem.classList.remove('blink-points');
+        }, 3000);
     }
 
     function getAllPoints(resultsArr) {
@@ -83,9 +91,11 @@ window.onload = function () {
             let score = 0;
             if (item === resultsArr[1][i] && item === resultsArr[2][i]) {
                 score = getOneLinePoints(item, i);
+                blinkPoints(score);
             } else if (winKits[item] === winKits[resultsArr[1][i]] &&
                 winKits[item] === winKits[resultsArr[2][i]]) {
                 score = getOneLinePoints(winKits[item], i);
+                blinkPoints(score);
             }
             if (score !== 0) {
                 highlightWinLine(score, i);
@@ -140,9 +150,12 @@ window.onload = function () {
             let points = getAllPoints(results);
             if (points >= 1000) showWinPoints(points);
             increaseBalance(balanceElem, points);
-            // balanceElem.value = +balanceElem.value + points;
             results = [];
             e.target.disabled = false;
         }, (spinTime + 2 * spinDelay) * 1000);
     });
+
+    document.getElementById('balance').onkeydown = function (e) {
+        return !(/^[\D]$/.test(e.key));
+    }
 };

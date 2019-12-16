@@ -137,8 +137,6 @@ h1
 	20%
 		transform: translate(50%, -50%) scale(1, 1)
 
-
-
 .reel
 	box-sizing: border-box
 	height: 300px
@@ -166,24 +164,62 @@ h1
 	object-fit: contain
 
 .balance
-	text-align: right
-	height: 35px
+	font-family: "digital", sans-serif
 	font-size: 35px
+	line-height: 25px
 	width: 200px
+	height: 35px
+	text-align: right
+	padding-top: 5px
+
+	&::-webkit-inner-spin-button
+		display: none
 
 	&__label
+		font-family: "roboto", sans-serif
 		font-size: 22px
-		font-weight: 200
+		font-weight: 500
 
-.btn-start
-	box-shadow: 1px 3px 6px rgba(0, 0, 0, 0.47)
-	&:active
-		top: 10px
-
-.debug-area
+.debug-area,
+.pay-table
 	background: linear-gradient(top, rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%)
 	border-radius: 20px
 	box-shadow: 7px 3px 16px 7px rgba(0, 0, 0, 0.43)
 
+.debug-area
+	margin-left: -15px !important
+
+.pay-table
+	margin-right: -15px !important
+
+.pay-table__img
+	width: 25px
+	height: 25px
+	margin: 0 5px
+	object-fit: contain
+
+.blink-points
+	color: forestgreen
+	font-weight: 600
+	animation-name: point-blinker
+	animation-duration: 0.3s
+	animation-iteration-count: infinite
+	animation-timing-function: linear
+	animation-direction: alternate
+
+@keyframes point-blinker
+	from
+		opacity: 0
+	to
+		opacity: 1
+
+@keyframes point-scale
+	from
+		transform: translate(50%, -50%) scale(0.1, 0.1)
+	to
+		transform: translate(50%, -50%) scale(1, 1)
+
+.btn-start
+	background-color: #dc4e5b
 
 @import "media" // Always at the end
