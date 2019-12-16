@@ -60,8 +60,8 @@ let reelItem = (function () {
             return resultsArr;
         }
 
-        function getFinishPosition(row, symbol) {
-            if (!row || !symbol) return getRandomPosition();
+        function getFinishPosition(randomMode, row, symbol) {
+            if (randomMode) return getRandomPosition();
             let trans = landPositions[row];
             let i = symbols.length;
             while (symbol !== symbols[--i]) {
@@ -87,7 +87,9 @@ let reelItem = (function () {
         reelContainer.append(createReelWrapper(symbols));
         setTranslation(reelContainer, translation);
 
-        return (goalRow, goalSymbol) => {
+        return (randomMode, goalRowSelector, goalSymbolSelector) => {
+            let goalRow = document.querySelector(goalRowSelector).value;
+            let goalSymbol = document.querySelector(goalSymbolSelector).value;
             reelContainer = reel.querySelector('.reel__container');
             removeObsoleteItems();
 
@@ -95,7 +97,7 @@ let reelItem = (function () {
             reel.prepend(newReelContainer);
             setTransform(reelContainer, config.spinTime, config.spinDelay);
 
-            translation = getFinishPosition(goalRow, goalSymbol);
+            translation = getFinishPosition(randomMode, goalRow, goalSymbol);
             let prevReelContainerTrans = 100 * config.reelSpeed + translation;
 
             setTimeout(() => {

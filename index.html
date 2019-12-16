@@ -15,70 +15,123 @@
     <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon-180x180.png">
 
     <link rel="stylesheet" href="css/main.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
 
-<body>
+<body class="bg-light text-secondary">
 
 <section class="display">
-    <div class="container">
-        <div class="row text-center slot-display">
+    <div class="mt-3 container d-flex flex-column slot-display__container">
+        <h1 class="mb-3 mt-4 text-center text-uppercase font-weight-bold">Slot machine</h1>
+        <div class="row mb-4 mx-auto justify-content-center flex-row slot-display">
             <div class="win-modal">
-                <h1 class="mb-0">You have won</h1>
+                <h1 class="mb-0">Big win</h1>
                 <span class="win-modal__score"></span>
-                <h1 class="mb-0">points</h1>
+                <span>points</span>
+                <h1 class="mb-0">jackpot</h1>
             </div>
             <div class="win-line win-line1"></div>
             <div class="win-line win-line2"></div>
             <div class="win-line win-line3"></div>
-            <div class="col-3">
-                <div class="reel reel__1">
+            <div class="d-flex slot-display__reels">
+                <div class="mx-2 bg-light reel reel__1">
                     <div class="reel__container">
                         <div class="reel__wrapper"></div>
                     </div>
                 </div>
-            </div>
-            <div class="col-3">
-                <div class="reel reel__2">
+                <div class="mx-2 bg-light reel reel__2">
                     <div class="reel__container">
                         <div class="reel__wrapper"></div>
                     </div>
                 </div>
-            </div>
-            <div class="col-3">
-                <div class="reel reel__3">
+                <div class="mx-2 bg-light reel reel__3">
                     <div class="reel__container">
                         <div class="reel__wrapper"></div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="mt-4 row text-center">
-            <div class="col-4">
-                <button class="btn btn-start">start</button>
-                <label class="mt-3">Landing position
-                    <select class="goal-row">
-                        <option value="">-</option>
-                        <option value="top">top</option>
-                        <option value="center">center</option>
-                        <option value="bottom">bottom</option>
-                    </select>
-                </label>
-                <label class="mt-1">Symbol
-                    <select class="goal-symbol">
-                        <option value="">-</option>
-                        <option value="3xBAR">3xBAR</option>
-                        <option value="BAR">BAR</option>
-                        <option value="2xBAR">2xBAR</option>
-                        <option value="7">7</option>
-                        <option value="CHERRY">CHERRY</option>
-                    </select>
-                </label>
-            </div>
-            <div class="col-4">
-                <label class="mt-3">Balance
-                    <input type="text" class="balance" value="50">
-                </label>
+        <div class="row mb-3 justify-content-center">
+            <label for="balance" class="mb-0 mr-2 align-self-center balance__label">Balance:</label>
+            <input id="balance" type="text" class="mr-5 align-self-center balance" value="50">
+            <button class="btn-lg btn-danger text-uppercase font-weight-bold btn-start">spin</button>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-5 mt-4 py-3 debug-area">
+                <h4 class="text-center">Debug area</h4>
+                <div class="text-center debug-area__mode">
+                    <span class="mr-2">Mode:</span>
+                    <input type="radio" id="random" name="mode" value="random" checked>
+                    <label for="random" class="mr-1">random</label>
+                    <input type="radio" id="fixed" name="mode" value="fixed">
+                    <label for="fixed">fixed</label>
+                </div>
+                <table class="w-100 text-center">
+                    <tr>
+                        <th>Right reel</th>
+                        <th>Middle reel</th>
+                        <th>Left reel</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w-100 goal-row-right">
+                                <option value="top">top</option>
+                                <option value="center">center</option>
+                                <option value="bottom">bottom</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="w-100 goal-row-middle">
+                                <option value="top">top</option>
+                                <option value="center">center</option>
+                                <option value="bottom">bottom</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="w-100 goal-row-left">
+                                <option value="top">top</option>
+                                <option value="center">center</option>
+                                <option value="bottom">bottom</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w-100 goal-symbol-right">
+                                <option value="3xBAR">3xBAR</option>
+                                <option value="BAR">BAR</option>
+                                <option value="2xBAR">2xBAR</option>
+                                <option value="7">7</option>
+                                <option value="CHERRY">CHERRY</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="w-100 goal-symbol-middle">
+                                <option value="3xBAR">3xBAR</option>
+                                <option value="BAR">BAR</option>
+                                <option value="2xBAR">2xBAR</option>
+                                <option value="7">7</option>
+                                <option value="CHERRY">CHERRY</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="w-100 goal-symbol-left">
+                                <option value="3xBAR">3xBAR</option>
+                                <option value="BAR">BAR</option>
+                                <option value="2xBAR">2xBAR</option>
+                                <option value="7">7</option>
+                                <option value="CHERRY">CHERRY</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>

@@ -1,7 +1,5 @@
 window.onload = function () {
     let balanceElem = document.querySelector('.balance');
-    let goalRowElem = document.querySelector('.goal-row');
-    let goalSymbolElem = document.querySelector('.goal-symbol');
     let winKits = {
         'BAR': 'kit1',
         '2xBAR': 'kit1',
@@ -55,7 +53,7 @@ window.onload = function () {
     });
 
     function highlightWinLine(score, lineNumb) {
-        let line = document.querySelector('.win-line' + (lineNumb+1));
+        let line = document.querySelector('.win-line' + (lineNumb + 1));
         if (score >= 1000) line.classList.add('active-red');
         else line.classList.add('active-yellow');
     }
@@ -72,7 +70,6 @@ window.onload = function () {
         alert("You do not have enough points to play! Please recharge points");
         return false;
     }
-
 
 
     function getOneLinePoints(symbol, i) {
@@ -107,21 +104,43 @@ window.onload = function () {
         }, 5000)
     }
 
+    function increaseBalance(balanceElem, receivedPoints) {
+        if (!receivedPoints) return;
+        let balance = +balanceElem.value;
+        let newBalance = balance + receivedPoints;
+        let counter;
+        if (receivedPoints < 1000) counter = 1;
+        if (receivedPoints >= 1000 && receivedPoints <= 2500) counter = 4;
+        if (receivedPoints > 2500) counter = 8;
+
+        let timerId = setInterval(() => {
+            for (let i = 1; i <= counter; i++) {
+                if (balance === newBalance) {
+                    balanceElem.value = balance;
+                    clearInterval(timerId);
+                    return;
+                }
+                ++balance;
+            }
+            balanceElem.value = balance;
+        }, 10);
+    }
+
     document.querySelector('.btn-start').addEventListener('click', (e) => {
-        let goalRow = goalRowElem.value;
-        let goalSymbol = goalSymbolElem.value;
         if (!allowGame(balanceElem)) return;
+        let randomMode = document.querySelector('#random').checked;
         --balanceElem.value;
         e.target.disabled = true;
-        results.push(startSpin1(goalRow, goalSymbol));
-        results.push(startSpin2(goalRow, goalSymbol));
-        results.push(startSpin3(goalRow, goalSymbol));
+        results.push(startSpin1(randomMode, '.goal-row-right', '.goal-symbol-right'));
+        results.push(startSpin2(randomMode, '.goal-row-middle', '.goal-symbol-middle'));
+        results.push(startSpin3(randomMode, '.goal-row-left', '.goal-symbol-left'));
         removeWinLine();
 
         setTimeout(() => {
             let points = getAllPoints(results);
-            if (points) showWinPoints(points);
-            balanceElem.value = +balanceElem.value + points;
+            if (points >= 1000) showWinPoints(points);
+            increaseBalance(balanceElem, points);
+            // balanceElem.value = +balanceElem.value + points;
             results = [];
             e.target.disabled = false;
         }, (spinTime + 2 * spinDelay) * 1000);
