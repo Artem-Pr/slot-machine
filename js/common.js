@@ -1,5 +1,8 @@
 window.onload = function () {
     let balanceElem = document.querySelector('.balance');
+    let btnStart = document.querySelector('.btn-start');
+    let selectElems = document.querySelectorAll('select');
+    let radioElems = document.querySelectorAll('input[type=\'radio\']');
     let winKits = {
         'BAR': 'kit1',
         '2xBAR': 'kit1',
@@ -31,6 +34,9 @@ window.onload = function () {
         'kit1_2': 5,
     };
     let results = [];
+    let muted = true;
+    let soundWheel = null;
+    let soundPayOff = null;
     let spinTime = 2; //s
     let spinDelay = 0.5; //s
     let startSpin1 = reelItem({
@@ -66,8 +72,12 @@ window.onload = function () {
     }
 
     function allowGame(balanceElem) {
-        if (balanceElem.value > 0) return true;
-        alert("You do not have enough points to play! Please recharge points");
+        if (+balanceElem.value > 0) return true;
+        let modal = document.querySelector('.modal');
+        modal.classList.add('active');
+        setTimeout(() => {
+            modal.classList.add('show');
+        });
         return false;
     }
 
@@ -82,7 +92,7 @@ window.onload = function () {
         blinkElem.classList.add('blink-points');
         setTimeout(() => {
             blinkElem.classList.remove('blink-points');
-        }, 3000);
+        }, 5000);
     }
 
     function getAllPoints(resultsArr) {
@@ -107,8 +117,7 @@ window.onload = function () {
     function showWinPoints(points) {
         let modal = document.querySelector('.win-modal');
         let modalText = modal.querySelector('.win-modal__score');
-        let audio = new Audio('../sounds/slot-payoff.wav');
-        audio.play();
+        if (!muted) setSounds('play', soundPayOff);
         modalText.textContent = points;
         modal.style.display = 'block';
         setTimeout(() => {
@@ -138,31 +147,78 @@ window.onload = function () {
         }, 10);
     }
 
-    document.querySelector('.btn-start').addEventListener('click', (e) => {
+    function disableElements(isDisabled) {
+        btnStart.disabled = isDisabled;
+        balanceElem.disabled = isDisabled;
+        selectElems.forEach((item) => item.disabled = isDisabled);
+        radioElems.forEach((item) => item.disabled = isDisabled);
+    }
+
+    function initSounds() {
+        if (!soundPayOff) soundPayOff = new Audio('../sounds/slot-payoff.wav');
+        if (!soundWheel) soundWheel = new Audio('../sounds/wheel4.wav');
+    }
+
+    function setSounds(action, elem, currentTime = 0) {
+        if (action === 'init') {initSounds(); return;}
+        if (action === 'play') elem.play();
+        if (action === 'stop') elem.pause();
+        elem.currentTime = currentTime;
+    }
+
+    btnStart.addEventListener('click', (e) => {
         if (!allowGame(balanceElem)) return;
-
-        let audio = new Audio('../sounds/wheel4.wav');
-        audio.play();
-
+        if (!muted) setSounds('play', soundWheel, 2);
         let randomMode = document.querySelector('#random').checked;
         --balanceElem.value;
-        e.target.disabled = true;
+        disableElements(true);
         results.push(startSpin1(randomMode, '.goal-row-right', '.goal-symbol-right'));
         results.push(startSpin2(randomMode, '.goal-row-middle', '.goal-symbol-middle'));
         results.push(startSpin3(randomMode, '.goal-row-left', '.goal-symbol-left'));
         removeWinLine();
 
         setTimeout(() => {
-            audio.pause();
+            if (!muted) setSounds('stop', soundWheel);
             let points = getAllPoints(results);
             if (points >= 1000) showWinPoints(points);
             increaseBalance(balanceElem, points);
             results = [];
-            e.target.disabled = false;
+            disableElements(false);
         }, (spinTime + 2 * spinDelay) * 1000);
     });
 
     document.getElementById('balance').onkeydown = function (e) {
+        let numberSrt = e.target.value;
+        let newNumberStr = numberSrt + e.key;
+        if (+newNumberStr > 5000) {
+            e.preventDefault();
+            e.target.value = 5000;
+            return ;
+        }
         return !(/^[\D]$/.test(e.key));
-    }
+    };
+
+    document.querySelector('.modal__close').addEventListener('click', () => {
+        let modal = document.querySelector('.modal');
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.classList.remove('active');
+        }, 300);
+    });
+
+    document.querySelectorAll('.speaker').forEach(speaker => {
+        speaker.addEventListener('click', (e) => {
+            e.target.classList.remove('active');
+            if (muted) {
+                document.querySelector('.unmuted').classList.add('active');
+                setSounds('init');
+                muted = false;
+            } else {
+                document.querySelector('.muted').classList.add('active');
+                setSounds('stop', soundWheel);
+                setSounds('stop', soundPayOff);
+                muted = true;
+            }
+        })
+    })
 };
