@@ -58,6 +58,8 @@ window.onload = function () {
         spinDelay: spinDelay * 2,
     });
 
+    setSounds('init');
+
     function highlightWinLine(score, lineNumb) {
         let line = document.querySelector('.win-line' + (lineNumb + 1));
         if (score >= 1000) line.classList.add('active-red');
@@ -211,7 +213,6 @@ window.onload = function () {
             e.target.classList.remove('active');
             if (muted) {
                 document.querySelector('.unmuted').classList.add('active');
-                setSounds('init');
                 muted = false;
             } else {
                 document.querySelector('.muted').classList.add('active');
