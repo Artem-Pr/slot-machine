@@ -107,6 +107,8 @@ window.onload = function () {
     function showWinPoints(points) {
         let modal = document.querySelector('.win-modal');
         let modalText = modal.querySelector('.win-modal__score');
+        let audio = new Audio('../sounds/slot-payoff.wav');
+        audio.play();
         modalText.textContent = points;
         modal.style.display = 'block';
         setTimeout(() => {
@@ -138,6 +140,10 @@ window.onload = function () {
 
     document.querySelector('.btn-start').addEventListener('click', (e) => {
         if (!allowGame(balanceElem)) return;
+
+        let audio = new Audio('../sounds/wheel4.wav');
+        audio.play();
+
         let randomMode = document.querySelector('#random').checked;
         --balanceElem.value;
         e.target.disabled = true;
@@ -147,6 +153,7 @@ window.onload = function () {
         removeWinLine();
 
         setTimeout(() => {
+            audio.pause();
             let points = getAllPoints(results);
             if (points >= 1000) showWinPoints(points);
             increaseBalance(balanceElem, points);

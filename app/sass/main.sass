@@ -38,14 +38,17 @@ b, strong
 h1
 	text-shadow: -2px -2px 0 #aaa
 
-.container
-	position: relative
-	width: 720px !important
+
+.container-fluid
+	min-width: 620px !important
+
 
 .slot-display__container
 	background: linear-gradient(top, rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%)
 	border-radius: 50px
 	box-shadow: 7px 3px 16px 7px rgba(0, 0, 0, 0.43)
+	position: relative
+	max-width: 720px !important
 
 .slot-display
 	position: relative
@@ -99,16 +102,18 @@ h1
 
 .win-modal
 	display: none
-	background-color: #dc3545
+	background:  url('../img/Jackpot.png') no-repeat
+	background-size: contain
 	color: #51e4fd
-	padding: 25px 80px
+	padding: 140px 210px 130px
 	text-transform: uppercase
-	
+	width: 670px
+
 	position: absolute
 	top: 50%
 	right: 50%
 	transform: translate(50%, -50%)
-	z-index: 1
+	z-index: 2
 
 	animation-name: blinker, scale
 	animation-duration: 0.5s, 2.5s
@@ -119,7 +124,9 @@ h1
 
 	&__score
 		font-size: 50px
-		font-weight: 600
+
+	&__points
+		font-size: 30px
 
 @keyframes blinker
 	from
@@ -187,10 +194,10 @@ h1
 	box-shadow: 7px 3px 16px 7px rgba(0, 0, 0, 0.43)
 
 .debug-area
-	margin-left: -15px !important
+	max-width: 350px
 
 .pay-table
-	margin-right: -15px !important
+	max-width: 500px
 
 .pay-table__img
 	width: 25px
