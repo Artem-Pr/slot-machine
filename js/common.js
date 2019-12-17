@@ -3,6 +3,8 @@ window.onload = function () {
     let btnStart = document.querySelector('.btn-start');
     let selectElems = document.querySelectorAll('select');
     let radioElems = document.querySelectorAll('input[type=\'radio\']');
+    let unmutedSpeaker = document.querySelector('.unmuted');
+    let mutedSpeaker = document.querySelector('.muted');
     let winKits = {
         'BAR': 'kit1',
         '2xBAR': 'kit1',
@@ -39,6 +41,8 @@ window.onload = function () {
     let soundPayOff = null;
     let spinTime = 2; //s
     let spinDelay = 0.5; //s
+    setSounds('init');
+
     let startSpin1 = reelItem({
         reelSelector: '.reel__1',
         reelSpeed: 4,
@@ -57,8 +61,6 @@ window.onload = function () {
         spinTime,
         spinDelay: spinDelay * 2,
     });
-
-    setSounds('init');
 
     function highlightWinLine(score, lineNumb) {
         let line = document.querySelector('.win-line' + (lineNumb + 1));
@@ -157,8 +159,8 @@ window.onload = function () {
     }
 
     function initSounds() {
-        if (!soundPayOff) soundPayOff = new Audio('../sounds/slot-payoff.wav');
-        if (!soundWheel) soundWheel = new Audio('../sounds/wheel4.wav');
+        if (!soundPayOff) soundPayOff = document.getElementById('soundPayOff');
+        if (!soundWheel) soundWheel = document.getElementById('soundWheel');
     }
 
     function setSounds(action, elem, currentTime = 0) {
@@ -210,12 +212,13 @@ window.onload = function () {
 
     document.querySelectorAll('.speaker').forEach(speaker => {
         speaker.addEventListener('click', (e) => {
-            e.target.classList.remove('active');
             if (muted) {
-                document.querySelector('.unmuted').classList.add('active');
+                mutedSpeaker.classList.remove('active');
+                unmutedSpeaker.classList.add('active');
                 muted = false;
             } else {
-                document.querySelector('.muted').classList.add('active');
+                unmutedSpeaker.classList.remove('active');
+                mutedSpeaker.classList.add('active');
                 setSounds('stop', soundWheel);
                 setSounds('stop', soundPayOff);
                 muted = true;
